@@ -26,11 +26,17 @@ end
 
 def print(students)
   if !students.empty?
-    counter = 0
-    while counter < students.length
-      puts "#{students[counter][:name]} (#{students[counter][:cohort]} cohort)"
-      counter += 1
+    cohorts = []
+    students.each do |student|
+      cohorts.push(student[:cohort])
     end
+    cohorts.uniq!.each do |cohort|
+      puts "Cohort: #{cohort}"
+      students.each do |student|
+        puts student[:name] if student[:cohort] == cohort
+      end
+    end
+
   end
 end
 
