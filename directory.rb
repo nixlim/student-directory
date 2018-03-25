@@ -1,12 +1,20 @@
 def input_students()
-  puts "Please enter the names of the students"
+  puts "Please enter details of the students"
   puts "To finish, just hit return twice"
   students = []
+  puts "Please enter the name"
   name = gets.tr("\n\r","")
+  puts "Please enter cohort"
+  cohort = gets.tr("\n\r","")
   while !name.empty? do
-    students << {name: name, cohort: :november}
+    cohort = :november if cohort.empty?
+    students << {name: name, cohort: cohort.to_sym}
     puts "Now we have #{students.count} #{students.count == 1 ? "student" : "students"}"
+    puts "Please enter the name"
     name = gets.tr("\n\r","")
+    break if name.empty?
+    puts "Please enter cohort"
+    cohort = gets.tr("\n\r","")
   end
   students
 end
