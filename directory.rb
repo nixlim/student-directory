@@ -18,8 +18,10 @@ end
 
 def print(students)
   if !students.empty?
-    students.each do |student|
-      puts "#{student[:name]} (#{student[:cohort]} cohort)" if student[:name].length < 12
+    counter = 0
+    while counter < students.length
+      puts "#{students[counter][:name]} (#{students[counter][:cohort]} cohort)"
+      counter += 1
     end
   end
 end
