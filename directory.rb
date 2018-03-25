@@ -17,8 +17,10 @@ def print_header()
 end
 
 def print(students)
-  students.each do |student|
-    puts "#{student[:name]} (#{student[:cohort]} cohort)" if student[:name].length < 12
+  if !students.empty?
+    students.each do |student|
+      puts "#{student[:name]} (#{student[:cohort]} cohort)" if student[:name].length < 12
+    end
   end
 end
 
