@@ -2,11 +2,11 @@ def input_students()
   puts "Please enter the names of the students"
   puts "To finish, just hit return twice"
   students = []
-  name = gets.chomp()
+  name = gets.tr("\n\r","")
   while !name.empty? do
     students << {name: name, cohort: :november}
     puts "Now we have #{students.count} #{students.count == 1 ? "student" : "students"}"
-    name = gets.chomp()
+    name = gets.tr("\n\r","")
   end
   students
 end
