@@ -1,50 +1,61 @@
-def input_students()
-  puts "Please enter details of the students"
-  puts "To finish, just hit return twice"
-  students = []
-  puts "Please enter the name"
-  name = gets.tr("\n\r","")
-  puts "Please enter cohort"
-  cohort = gets.tr("\n\r","")
-  while !name.empty? do
-    cohort = :november if cohort.empty?
-    students << {name: name, cohort: cohort.to_sym}
-    puts "Now we have #{students.count} #{students.count == 1 ? "student" : "students"}"
-    puts "Please enter the name"
-    name = gets.tr("\n\r","")
-    break if name.empty?
-    puts "Please enter cohort"
-    cohort = gets.tr("\n\r","")
+@students = []
+
+def interactive_menu
+  loop do
+    print_menu
+    process(gets.chomp())
   end
-  students
 end
 
-def print_header()
+def process(selection)
+  case selection
+    when "1"
+      input_students()
+    when "2"
+      show_students()
+    when "9"
+      exit
+    else
+      puts "I don't know what you meant, try again"
+  end
+end
+
+def show_students
+  print_header()
+  print_students_list()
+  print_footer()
+end
+
+def print_menu
+  puts "1. Input students"
+  puts "2. Show students"
+  puts "9. Exit"
+end
+
+def input_students
+  puts "Please enter the names of the students"
+  puts "To finish, just hit return twice"
+  name = gets.chomp
+  while !name.empty? do
+    @students << {name: name, cohort: :november}
+    puts "Now we have #{@students.count} #{@students.count == 1 ? "student" : "students"}"
+    name = gets.chomp
+  end
+end
+
+def print_header
   puts "The students of Villains Academy"
   puts "-------------"
 end
 
-def print(students)
-  if !students.empty?
-    cohorts = []
-    students.each do |student|
-      cohorts.push(student[:cohort])
-    end
-    cohorts.uniq!.each do |cohort|
-      puts "Cohort: #{cohort}"
-      students.each do |student|
-        puts student[:name] if student[:cohort] == cohort
-      end
-    end
-
+def print_students_list()
+  @students.each do |student|
+    puts "#{student[:name]} (#{student[:cohort]} cohort)"
   end
 end
 
-def print_footer(students)
-  puts "Overall, we have #{students.count} great #{students.count == 1 ? "student" : "students"}"
+def print_footer()
+  puts "Overall, we have #{@students.count} great #{@students.count == 1 ? "student" : "students"}"
 end
 
-students = input_students()
-print_header()
-print(students)
-print_footer(students)
+interactive_menu
