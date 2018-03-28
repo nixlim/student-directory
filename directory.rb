@@ -1,3 +1,4 @@
+require 'csv'
 @students = []
 
 def interactive_menu
@@ -16,13 +17,11 @@ end
 
 def load_students(filename = "students.csv")
   if File.exists?(filename)
-    File.open(filename, "r") do |file|
-      file.readlines.each do |line|
-        name, cohort = line.chomp.split(",")
-        add_students(name, cohort)
-      end
-      puts "Loaded #{@students.count} from #{filename}"
+    CSV.foreach(filename) do |row|
+      name, cohort = row
+      add_students(name, cohort)
     end
+    puts "Loaded #{@students.count} from #{filename}"
   else
     puts "Sorry, #{filename} doesn't exist. Trying default file."
     load_students
@@ -60,13 +59,12 @@ def save_students
   puts "Please enter file name you would like to use or press enter for default"
   filename = STDIN.gets.chomp()
   filename = "students" if filename.empty?
-  file = File.open("#{filename}.csv", "w")
-  @students.each do |student|
-    student_data = [student[:name], student[:cohort]]
-    csv_line= student_data.join(",")
-    file.puts csv_line
+  CSV.open("#{filename}.csv", "w") do |csv|
+    @students.each do |student|
+      student_data = [student[:name], student[:cohort]]
+      csv << student_data
+    end
   end
-  file.close
   puts "Saved student records to #{filename}.csv"
 end
 
