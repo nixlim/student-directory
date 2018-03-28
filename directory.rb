@@ -16,13 +16,13 @@ end
 
 def load_students(filename = "students.csv")
   if File.exists?(filename)
-    file = File.open(filename, "r")
-    file.readlines.each do |line|
-      name, cohort = line.chomp.split(",")
-      add_students(name, cohort)
+    File.open(filename, "r") do |file|
+      file.readlines.each do |line|
+        name, cohort = line.chomp.split(",")
+        add_students(name, cohort)
+      end
+      puts "Loaded #{@students.count} from #{filename}"
     end
-    puts "Loaded #{@students.count} from #{filename}"
-    file.close
   else
     puts "Sorry, #{filename} doesn't exist. Trying default file."
     load_students
