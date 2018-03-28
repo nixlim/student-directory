@@ -24,9 +24,24 @@ def load_students(filename = "students.csv")
   file = File.open(filename, "r")
   file.readlines.each do |line|
     name, cohort = line.chomp.split(",")
-    @students << {name: name, cohort: cohort.to_sym}
+    add_students(name, cohort)
   end
   file.close
+end
+
+def input_students
+  puts "Please enter the names of the students"
+  puts "To finish, just hit return twice"
+  name = STDIN.gets.chomp
+  while !name.empty? do
+    add_students(name)
+    puts "Now we have #{@students.count} #{@students.count == 1 ? "student" : "students"}"
+    name = STDIN.gets.chomp
+  end
+end
+
+def add_students(name, cohort = "november")
+  @students << {name: name, cohort: cohort.to_sym}
 end
 
 def save_students
@@ -70,16 +85,7 @@ def print_menu
   puts "9. Exit"
 end
 
-def input_students
-  puts "Please enter the names of the students"
-  puts "To finish, just hit return twice"
-  name = STDIN.gets.chomp
-  while !name.empty? do
-    @students << {name: name, cohort: :november}
-    puts "Now we have #{@students.count} #{@students.count == 1 ? "student" : "students"}"
-    name = STDIN.gets.chomp
-  end
-end
+
 
 def print_header
   puts "The students of Villains Academy"
