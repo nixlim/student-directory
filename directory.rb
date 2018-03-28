@@ -11,24 +11,35 @@ end
 def try_load_students
   filename = ARGV.first
   return if filename.nil?
-  if File.exists?(filename)
-    load_students(filename)
-    puts "Loaded #{@students.count} from #{filename}"
-  else
-    puts "Sorry, #{filename} doesn't exist."
-    load_students()
-    exit
-  end
+  load_students(filename)
 end
 
 def load_students(filename = "students.csv")
-  file = File.open(filename, "r")
-  file.readlines.each do |line|
-    name, cohort = line.chomp.split(",")
-    add_students(name, cohort)
+  if File.exists?(filename)
+    file = File.open(filename, "r")
+    file.readlines.each do |line|
+      name, cohort = line.chomp.split(",")
+      add_students(name, cohort)
+    end
+    puts "Loaded #{@students.count} from #{filename}"
+    file.close
+  else
+    puts "Sorry, #{filename} doesn't exist. Trying default file."
+    load_students
   end
-  file.close
 end
+
+def get_load_filename
+  puts "Please confirm the name of the file you want to load or press enter for default"
+  filename = STDIN.gets.chomp
+  if filename.empty?
+    puts "Loading default file, if available"
+    load_students()
+  else
+    load_students(filename)
+  end
+end
+
 
 def input_students
   puts "Please enter the names of the students"
@@ -46,13 +57,17 @@ def add_students(name, cohort = "november")
 end
 
 def save_students
-  file = File.open("students.csv", "w")
+  puts "Please enter file name you would like to use or press enter for default"
+  filename = STDIN.gets.chomp()
+  filename = "students" if filename.empty?
+  file = File.open("#{filename}.csv", "w")
   @students.each do |student|
     student_data = [student[:name], student[:cohort]]
     csv_line= student_data.join(",")
     file.puts csv_line
   end
   file.close
+  puts "Saved student records to #{filename}.csv"
 end
 
 def process(selection)
@@ -68,7 +83,7 @@ def process(selection)
       save_students()
     when "4"
       puts "Loading student list from file"
-      load_students()
+      get_load_filename()
     when "9"
       puts "Goodbye"
       exit
@@ -86,8 +101,8 @@ end
 def print_menu
   puts "1. Input students"
   puts "2. Show students"
-  puts "3. Save the list to students.csv"
-  puts "4. Load the list from students.csv"
+  puts "3. Save the list to file"
+  puts "4. Load the list from file"
   puts "9. Exit"
 end
 
